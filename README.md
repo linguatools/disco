@@ -1,4 +1,4 @@
-# disco
+# DISCO API
 compute semantic similarity between arbitrary words and phrases in many languages
 
 This is the official source code repository for linguatools' DISCO API. For more information on DISCO visit [http://www.linguatools.de/disco/disco_en.html](http://www.linguatools.de/disco/disco_en.html)
@@ -8,11 +8,11 @@ DISCO consists of
 - the DISCO API (this repository) to query an existing word space: [API description](http://www.linguatools.de/disco/disco-api-2.1/index.html) (javadoc)
 - [DISCO Builder](http://www.linguatools.de/disco/disco-builder.html) which allows to create a word space from a text corpus, or to import it from [word2vec](http://code.google.com/p/word2vec/) or [GloVe](http://nlp.stanford.edu/projects/glove/) vector files.
 
-You can download ready-to-use DISCO word spaces and word2vec word embeddings for many languages at [http://www.linguatools.de/disco/disco-download_en.html](http://www.linguatools.de/disco/disco-download_en.html).
+You can download ready-to-use native DISCO word spaces (high-dimensional distributional count vectors) and DISCO word embeddings (low-dimensional predict vectors) imported from word2vec for many languages at [http://www.linguatools.de/disco/disco-download_en.html](http://www.linguatools.de/disco/disco-download_en.html).
 
 ## Usage
 ### Java API
-See the [javadoc](http://www.linguatools.de/disco/disco-api-2.1/index.html) and the [example Java code]().
+See the [javadoc](http://www.linguatools.de/disco/disco-api-2.1/index.html) and the [example Java code](https://github.com/linguatools/disco/blob/master/UseDISCO.java).
 
 ### Command line
 For instructions on command line usage call DISCO API without any parameters:
