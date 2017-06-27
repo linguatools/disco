@@ -84,6 +84,10 @@ public class ConfigFile {
     public boolean addInverseRelations = true;
     // bz
     public int numberFeatureWords = 30000;
+    // number of most similar words to store for each word. Given by DISCOBuilder
+    // parameter -nBest (default 300) or Import parameter -nBest.
+    // 0 for word spaces of type COL.
+    public int numberOfSimilarWords = 0;
     public String weightingMethod = "lin";
     public float minWeight = 0.1F;
     public SimilarityMeasure similarityMeasure = SimilarityMeasure.KOLB;
@@ -213,6 +217,10 @@ public class ConfigFile {
             numberFeatureWords = Integer.parseInt(props.getProperty("numberFeatureWords"));
         }
         
+        if( props.getProperty("numberOfSimilarWords") != null && !props.getProperty("numberOfSimilarWords").isEmpty() ){
+            numberOfSimilarWords = Integer.parseInt(props.getProperty("numberOfSimilarWords"));
+        }
+        
         if( props.getProperty("weightingMethod") != null && !props.getProperty("weightingMethod").isEmpty() ){
             weightingMethod = props.getProperty("weightingMethod");
         }
@@ -319,6 +327,7 @@ public class ConfigFile {
          props.setProperty("wordByDocument", String.valueOf(wordByDocument));
          props.setProperty("addInverseRelations", String.valueOf(addInverseRelations));
          props.setProperty("numberFeatureWords", String.valueOf(numberFeatureWords));
+         props.setProperty("numberOfSimilarWords", String.valueOf(numberOfSimilarWords));
          props.setProperty("weightingMethod", weightingMethod);
          props.setProperty("minWeight", String.valueOf(minWeight));
          props.setProperty("similarityMeasure", String.valueOf(similarityMeasure));
