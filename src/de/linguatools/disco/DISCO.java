@@ -657,24 +657,39 @@ public class DISCO {
      * <code>w2</code>, summed up over all relations. 
      * @param w1 input word #1 (must be a single token).
      * @param w2 input word #2 (must be a single token).
-     * @return the sum of the significance values between word w1 and all its
+     * @return computes the sum of the significance values between word w1 and all its
      * features that have w2 as their word part while ignoring the relation (if
-     * any). If w1 is not found the return value is 0.
+     * any) and the same for w2 with w1 as feature. Returns whichever value is greater.
+     * If w1 or w2 are not found the return value is 0.
      * @throws java.io.IOException
      */
     public float collocationalValue(String w1, String w2) throws IOException{
 
-        // get the cooccurrences of w1 summed up over all relations
-        ReturnDataCol[] cols = collocations(w1);
-        if( cols == null ) return 0.0F;
+        // get the cooccurrences of w1 and w2 summed up over all relations
+        ReturnDataCol[] cols1 = collocations(w1);
+        ReturnDataCol[] cols2 = collocations(w2);
         
-        float v = 0.0F;
-        for(ReturnDataCol col : cols){
-            if( col.word.equals(w2) ){
-                v = col.value;
+        float v1 = 0.0F;
+        if( cols1 != null ){
+            for(ReturnDataCol col : cols1){
+                if( col.word.equals(w2) ){
+                    v1 = col.value;
+                    break;
+                }
             }
         }
-        return v;
+        
+        float v2 = 0.0F;
+        if( cols2 != null ){
+            for(ReturnDataCol col : cols2){
+                if( col.word.equals(w1) ){
+                    v2 = col.value;
+                    break;
+                }
+            }
+        }
+        
+        return (v1 > v2) ? v1 : v2;
     }
 
     /***************************************************************************

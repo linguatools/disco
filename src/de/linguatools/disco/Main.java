@@ -48,13 +48,14 @@ public class Main{
      *******************************************************************/
     private static void printUsage(){
         System.out.println("disco V2.1 -- www.linguatools.de/disco");
-        System.out.println("Usage: java -jar disco-2.0.jar <indexDir> <option>");
+        System.out.println("Usage: java -jar disco-2.1.jar <indexDir> <option>");
         System.out.println("Options:   NOTE THAT <w>, <w1>, <w2> have to be single tokens!");
         System.out.println("\t\t-f <w>\t\treturn corpus frequency of word <w>");
         System.out.println("\t\t-s <w1> <w2> <simMeasure>\treturn semantic similarity between words <w1> and <w2>");
         System.out.println("\t\t             simMeasure = {COSINE, KOLB}, default is COSINE.");
         System.out.println("\t\t-s2 <w1> <w2>\treturn second order similarity between words <w1> and <w2>");
         System.out.println("\t\t\t\tDoes not work with word spaces of type \"COL\"!");
+        System.out.println("\t\t-cv <w1> <w2>\treturn collocational value between words <w1> and <w2>");
         System.out.println("\t\t-bn <w> <n>\treturn the <n> most similar words for word <w>");
         System.out.println("\t\t\t\tDoes not work with word spaces of type \"COL\"!");
         System.out.println("\t\t-bs <w> <s>\treturn all words that are at least <s> similar to word <w>");
@@ -300,6 +301,26 @@ public class Main{
                 } catch (WrongWordspaceTypeException ex) {
                     System.out.println("Error: Wrong wordspace type: only works "
                             + "with wordspaces of type SIM!");
+                }
+            }
+            ///////////////////////////////////////////////////////////////////////////            
+            // -cv <w1> <w2>: return collocational value between words <w1> and <w2> //
+            ///////////////////////////////////////////////////////////////////////////
+            else if( args[1].equals("-cv") ){
+                if ( args.length < 4 ){
+                    printUsage();
+                    return;
+                }
+                if ( args[2] == null || args[3] == null ){
+                    printUsage();
+                    return;
+                }
+                try {
+                    DISCO d = new DISCO(args[0], false);
+                    float sig = d.collocationalValue(args[2], args[3]);
+                    System.out.println(sig);
+                } catch (IOException ex) {
+                    System.out.println("Error: IOException: "+ex);
                 }
             }
             /////////////////////////////////////////////////////////////////            
