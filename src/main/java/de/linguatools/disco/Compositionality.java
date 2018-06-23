@@ -891,7 +891,7 @@ public class Compositionality {
     /**
      * Exhaustive breath-first search to find the shortest path between two input
      * words in the neighborhood graph. Interestingly, this always finds a path
-     * (at least if <code>numberOfSimilarWords >= 50</code>), showing that the
+     * (at least if <code>numberOfSimilarWords &gt;= 50</code>), showing that the
      * neighborhood graph of word spaces is fully connected. For more information
      * on the neighborhood graph see <code>similarWordsGraphSearch</code>.<br>
      * <b>Important</b>: This method only works with word spaces of type SIM.<br>
@@ -996,7 +996,7 @@ public class Compositionality {
      * vector should be equal to the vector for "armless": <i>arm + less = armless</i>.
      * Or: <i>less = armless - arm</i>, or with our variables above: <i>less = a2 - b2</i>.
      * Now, if we add this offset vector to our <i>b1 = child</i> then we should get
-     * the vector for our missing <i>a1</i>: <i>a1 = child + less = b1 + a2 - b2</i>.  
+     * the vector for our missing <i>a1</i>: <i>a1 = child + less = b1 + a2 - b2</i>.<br> 
      * <b>Warning:</b> This method is very time consuming because after computing
      * v(a1), the most similar word vector to v(a1) has to be found in the word 
      * space. This is done by comparing <b>all</b> vectors in the word space with
