@@ -28,6 +28,7 @@ import java.util.List;
  * =============================================================================
  * 
  * @author peterkolb
+ * @version 3.0
  */
 public class Subword {
     

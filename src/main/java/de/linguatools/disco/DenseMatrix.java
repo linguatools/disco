@@ -49,16 +49,27 @@ import org.apache.commons.lang.ArrayUtils;
  * This stores a word space in a dense matrix. Use for low-dimensional word 
  * embeddings only.
  * @author peter
+ * @version 3.0
  */
 public class DenseMatrix extends DISCO implements Serializable {
     
-    // word space: stores word vectors for all words
+    /**
+     * word space: stores word vectors (embeddings) for all words.
+     */
     private final float[][] matrix;
-    // ngram vectors (optional)
+    /**
+     * subword ngram vectors (optional).
+     */
     private final float[][] ngramMatrix;
-    // the optional SIM part:
-    int[][] simMatrix; // stores most similar words for each word
-    float[][] simValues; // stores the similarity values for the simMatrix
+    /**
+     * stores most similar words for each word (optional, only for word spaces
+     * of type SIM).
+     */
+    private int[][] simMatrix;
+    /**
+     * stores the similarity values for the simMatrix.
+     */
+    private float[][] simValues;
     // words
     // ACHTUNG: containsKey() funktioniert nicht! Stattdessen -1 für not contained!
     GOVMinimalPerfectHashFunction<CharSequence> word2indexMap; // word --> index in int[]

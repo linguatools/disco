@@ -22,6 +22,7 @@ import java.util.List;
 /**
  * Basic vector algebra for dense vectors (float arrays).
  * @author peterkolb
+ * @version 3.0
  */
 public class DenseVector {
     
