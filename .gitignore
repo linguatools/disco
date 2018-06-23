@@ -1,2 +1,5 @@
-/nbproject/private/
-/build/
+nbproject/private/
+build/
+gradle/
+.gradle/
+.nb-gradle/
