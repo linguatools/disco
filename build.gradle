@@ -7,13 +7,9 @@ targetCompatibility = 1.8
     
 repositories {
     jcenter()
-    flatDir {
-        dirs 'lib'
-    }
 }
 
 dependencies {
-    compile fileTree(dir: 'lib', include: '*.jar')
     compile group: 'org.apache.lucene', name: 'lucene-core', version: '5.1.0'
     compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '5.1.0'
     compile group: 'org.apache.lucene', name: 'lucene-queryparser', version: '5.1.0'
@@ -25,7 +21,7 @@ dependencies {
 task fatJar(type: Jar) {
     manifest {
         attributes 'Implementation-Title': 'DISCO',
-                'Implementation-Version': '3.0',
+                'Implementation-Version': '3.0.0',
                 'Main-Class': 'de.linguatools.disco.Main'
     }
     baseName = project.name + '-all'
