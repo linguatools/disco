@@ -93,7 +93,7 @@ public class DenseMatrix extends DISCO implements Serializable {
     // similar words for each word are stored in simMatrix, and the corresponding
     // similarity values in simValues.
     private DISCO.WordspaceType wordspaceType;
-    int numberOfSimilarWords; // = 0 if wordspaceType == COL
+    private int numberOfSimilarWords; // = 0 if wordspaceType == COL
     
     public static final Charset UTF8 = Charset.forName("UTF-8");
     private static final long serialVersionUID = 20170125L;
@@ -751,7 +751,6 @@ public class DenseMatrix extends DISCO implements Serializable {
             System.err.println("Cannot deserialize DenseMatrix: "+ex);
         }
         
-        // TODO: fix this bug in DenseMatrix creation!                 #################################
         if( denseMatrix.simMatrix != null ){
             denseMatrix.numberOfSimilarWords = denseMatrix.simMatrix[0].length;
         }
