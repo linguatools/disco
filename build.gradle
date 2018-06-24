@@ -1,12 +1,12 @@
 apply plugin: 'java'
-version = '3.0'
+version = '3.0.0'
 compileJava.options.encoding = 'UTF-8'
 javadoc.options.encoding = 'UTF-8'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
     
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
@@ -21,7 +21,7 @@ dependencies {
 task fatJar(type: Jar) {
     manifest {
         attributes 'Implementation-Title': 'DISCO',
-                'Implementation-Version': '3.0.0',
+                'Implementation-Version': version,
                 'Main-Class': 'de.linguatools.disco.Main'
     }
     baseName = project.name + '-all'
