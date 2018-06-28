@@ -1,3 +1,6 @@
+plugins {
+  id "com.github.johnrengelman.shadow" version "2.0.4"
+}
 apply plugin: 'java'
 apply plugin: 'maven'
 version = '3.0.0'
@@ -10,6 +13,12 @@ repositories {
     mavenCentral()
 }
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'de.linguatools.disco.Main'
+    }
+}
+
 dependencies {
     compile group: 'org.apache.lucene', name: 'lucene-core', version: '5.1.0'
     compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '5.1.0'
@@ -17,20 +26,4 @@ dependencies {
     compile group: 'it.unimi.dsi', name: 'sux4j', version: '4.2.0'
     testCompile 'junit:junit:4.12'
     testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
-}
-
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Implementation-Title': 'DISCO',
-                'Implementation-Version': version,
-                'Main-Class': 'de.linguatools.disco.Main'
-    }
-    baseName = project.name + '-all'
-    from (configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } ){
-        // remove all signature files to avoid JNI error with dependencies
-        exclude "META-INF/*.SF"
-        exclude "META-INF/*.DSA"
-        exclude "META-INF/*.RSA"
-    }
-    with jar
 }
