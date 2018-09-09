@@ -28,12 +28,12 @@ gunzip cc.de.300.vec.gz
 ```
 Download [DISCO Builder](http://www.linguatools.de/disco/disco-builder.html):
 ```
-wget http://www.linguatools.de/disco/DISCOBuilder-1.1.tar.gz
-tar zxf DISCOBuilder-1.1.tar.gz
+wget http://www.linguatools.de/disco/DISCOBuilder-1.1.1.tar.bz2
+tar jxf DISCOBuilder-1.1.1.tar.bz2
 ```
 Convert the vector file into a DISCO DenseMatrix:
 ```
-java -Xmx8g -cp DISCOBuilder-1.1/DISCOBuilder-1.1.0-all.jar de.linguatools.disco.builder.Import -in cc.de.300.vec -out cc.de.300.col.denseMatrix -wsType COL 
+java -Xmx8g -cp DISCOBuilder-1.1.1/DISCOBuilder-1.1.1-all.jar de.linguatools.disco.builder.Import -in cc.de.300.vec -out cc.de.300.col.denseMatrix -wsType COL 
 ```
 Query the new DISCO word space from the command line with the DISCO API:
 ```
