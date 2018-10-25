@@ -86,6 +86,7 @@ public class DenseMatrix extends DISCO implements Serializable {
     private final int maxN;
     // disco.config
     private final ConfigFile config;
+    private final Map<String,Byte> stopwordsHash;
     
     // a DenseMatrix is of type COL if it only stores word vectors. In this case
     // simMatrix and simValues both are null.
@@ -150,6 +151,12 @@ public class DenseMatrix extends DISCO implements Serializable {
         this.config = config;
         this.wordspaceType = wordspaceType;
         this.numberOfSimilarWords = numberOfSimilarWords;
+        this.stopwordsHash = new HashMap<>();
+        if( this.config.stopwords != null ){
+            for( String w : config.stopwords.trim().split("\\s+") ){
+                stopwordsHash.put(w, Byte.MIN_VALUE);
+            }
+        }
     }
     
     /**
@@ -407,10 +414,13 @@ public class DenseMatrix extends DISCO implements Serializable {
     }
     
     @Override
-    public String[] getStopwords() throws FileNotFoundException, IOException,
-            CorruptConfigFileException{
-        
+    public String[] getStopwords(){
         return config.stopwords.trim().split("\\s+");
+    }
+    
+    @Override
+    public Map<String,Byte> getStopwordsHash(){
+        return stopwordsHash;
     }
     
     @Override

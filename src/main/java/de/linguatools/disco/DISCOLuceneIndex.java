@@ -67,6 +67,7 @@ public class DISCOLuceneIndex extends DISCO {
      * disco.config
      */
     private final ConfigFile config;
+    private final Map<String,Byte> stopwordsHash;
     /**
      * The word space loaded into RAM.
      */
@@ -119,6 +120,12 @@ public class DISCOLuceneIndex extends DISCO {
             wordspaceType = WordspaceType.COL;
         }else{
             wordspaceType = WordspaceType.SIM;
+        }
+        stopwordsHash = new HashMap<>();
+        if( config.stopwords != null ){
+            for( String s : config.stopwords.trim().split("\\s+") ){
+                stopwordsHash.put(s, Byte.MIN_VALUE);
+            }
         }
     }
     
@@ -440,33 +447,16 @@ public class DISCOLuceneIndex extends DISCO {
     
     /**
      * Get the stopwords for this word space instance. 
-     * @return Array with stopwords
-     * @throws FileNotFoundException
-     * @throws IOException
-     * @throws CorruptConfigFileException 
+     * @return Array with stopwords 
      */
     @Override
-    public String[] getStopwords() throws FileNotFoundException, IOException,
-            CorruptConfigFileException{
-        
-        // get the stopwords from the line "stopwords" in the file
-        // "disco.config"
-        String configFileName = indexDir + File.separator + "disco.config";
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(
-                    new FileInputStream(new File(configFileName)), "UTF-8"))) {
-            String line;
-            while( (line = br.readLine()) != null ){
-                line = line.trim();
-                if( line.startsWith("stopwords=") ){
-                    String[] stopwords = line.substring(10).trim().split("\\s+");
-                    return stopwords;
-                }
-            }
-        }
-        
-        // throw CorruptConfigFileException
-        throw new CorruptConfigFileException("ERROR: the stopwords "
-                    + "could not be determined from the file "+configFileName);
+    public String[] getStopwords(){
+        return config.stopwords.trim().split("\\s+");
+    }
+    
+    @Override
+    public Map<String,Byte> getStopwordsHash(){
+        return stopwordsHash;
     }
     
     @Override
