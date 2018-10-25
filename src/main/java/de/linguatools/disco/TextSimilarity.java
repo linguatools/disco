@@ -21,6 +21,7 @@ package de.linguatools.disco;
 import de.linguatools.disco.DISCO.SimilarityMeasure;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -111,11 +112,12 @@ public class TextSimilarity {
         float totalSim = 0.0F;
         float totalWeight = 0.0F;
 
-        // TODO: tokenize
+        // tokenize
+        List<String> buf = UnicodeTokenizer.tokenize(text);
+        List<String> h_buf = UnicodeTokenizer.tokenize(hypothesis);
         
         // store text in a vector, filter stop words
         ArrayList t = new ArrayList();
-        String[] buf = text.split("[\\s]+");
         for (String b : buf) {
             if (!disco.getStopwordsHash().containsKey(b)) {
                 t.add(b);
@@ -124,7 +126,6 @@ public class TextSimilarity {
 
         // store hypothesis in a vector, filter stop words
         ArrayList h = new ArrayList();
-        String[] h_buf = hypothesis.split("[\\s]+");
         for (String hb : h_buf) {
             if (!disco.getStopwordsHash().containsKey(hb)) {
                 h.add(hb);
