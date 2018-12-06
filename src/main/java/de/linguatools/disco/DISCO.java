@@ -322,13 +322,12 @@ public abstract class DISCO {
     /**
      * Gets list of stopwords from the <code>disco.config</code> file in the 
      * word space.
-     * @return stop words that were used in word space creation.
-     * @throws FileNotFoundException
-     * @throws IOException
-     * @throws CorruptConfigFileException 
+     * @return stop words that were used in word space creation. 
      */
-    public abstract String[] getStopwords() throws FileNotFoundException, IOException,
-            CorruptConfigFileException;
+    public abstract String[] getStopwords();
+    
+    public abstract Map<String,Byte> getStopwordsHash();
+    
     /**
      * Size of the underlying corpus.
      * @return 
