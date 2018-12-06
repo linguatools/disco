@@ -30,7 +30,7 @@ import java.util.Properties;
  * This class contains methods for creating, reading and accessing the
  * configuration file "disco.config".
  * @author peter
- * @version 2.0
+ * @version 3.0
  ******************************************************************************/
 public class ConfigFile implements Serializable {
     
@@ -124,6 +124,7 @@ public class ConfigFile implements Serializable {
     public String allowedCharactersFeature = "\\.\\-'_";
     public boolean findMultiTokenWords = false;
     public String multiTokenWordsDictionary = "";
+    public String tokenAnnotatorMap = "";
 
     /***************************************************************************
      * Constructor 1: create class with empty (default) fields.
@@ -304,6 +305,10 @@ public class ConfigFile implements Serializable {
             multiTokenWordsDictionary = props.getProperty("multiTokenWordsDictionary");
         }
         
+        if( props.getProperty("tokenAnnotatorMap") != null && !props.getProperty("tokenAnnotatorMap").isEmpty() ){
+            tokenAnnotatorMap = props.getProperty("tokenAnnotatorMap");
+        }
+        
         // openingTag, closingTag overrides leftContext, rightContext, position
         if( !openingTag.isEmpty() && !closingTag.isEmpty() ){
             position = false;
@@ -367,6 +372,7 @@ public class ConfigFile implements Serializable {
          props.setProperty("allowedCharactersFeature", allowedCharactersFeature);
          props.setProperty("findMultiTokenWords", String.valueOf(findMultiTokenWords));
          props.setProperty("multiTokenWordsDictionary", multiTokenWordsDictionary);
+         props.setProperty("tokenAnnotatorMap", tokenAnnotatorMap);
          props.store(new FileOutputStream(new File(filename)), null);
     }
 }
