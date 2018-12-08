@@ -45,7 +45,7 @@ public class ConfigFile implements Serializable {
     public enum FileFormat {
         TOKENIZED,
         LEMMATIZED,
-        CONNL,
+        CONLL,
         UNDEFINED
     }
     
@@ -64,9 +64,9 @@ public class ConfigFile implements Serializable {
                 fileFormat.equalsIgnoreCase("lemmatised")){
             return FileFormat.LEMMATIZED;
         }
-        if( fileFormat.equalsIgnoreCase("connl") || 
-                fileFormat.equalsIgnoreCase("connl-u")){
-            return FileFormat.CONNL;
+        if( fileFormat.equalsIgnoreCase("connl") || fileFormat.equalsIgnoreCase("conll") ||
+                fileFormat.equalsIgnoreCase("connl-u") || fileFormat.equalsIgnoreCase("conll-u") ){
+            return FileFormat.CONLL;
         }
         return null;
     }
