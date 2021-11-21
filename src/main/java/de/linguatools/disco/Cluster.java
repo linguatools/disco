@@ -23,7 +23,9 @@ import java.io.PrintWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.lucene.index.CorruptIndexException;
@@ -120,23 +122,21 @@ public class Cluster {
     }
 
     /***************************************************************************
-     * Retrieves the similar words for all the words in the input set and 
-     * extends the input set by all words that appear in the similarity lists of
-     * all the input words. I.e. adds the intersection of the similarity lists
-     * of the input words to the input set.<br>
-     * This method is comparable to <a 
-     * href="http://googlesystem.blogspot.de/2011/08/google-sets-will-be-shut-down.html">Google
-     * Sets</a>.<br>
+     * Creates a vector representing the input set by vector addition. Then finds
+     * the most similar words to this compositional vector in the index and returns
+     * them.<br>
      * <b>Important note:</b> This method only works with word spaces
      * of type <code>DISCO.WordspaceType.SIM</code>!
      * @param disco DISCO word space of type <code>DISCO.WordspaceType.SIM</code>.
      * @param inputSet set of input words (must be single tokens).
-     * @return input set plus the similar words that were found (if any)
+     * @param n max size of the word list that is returned.
+     * @return list of similar words that were found. The words from the inputSet
+     * are not contained in the list.
      * @throws java.io.IOException
      * @throws WrongWordspaceTypeException if the <code>disco</code> word space
      * is not of type <code>DISCO.WordspaceType.SIM</code>.
      */
-    public static String[] growSet(DISCO disco, String[] inputSet) 
+    public static List<String> growSet(DISCO disco, String[] inputSet, int n) 
             throws IOException, WrongWordspaceTypeException{
 
         // check word space type
@@ -145,51 +145,29 @@ public class Cluster {
                     + "to word spaces of type "+disco.getWordspaceType());
         }
         
-        // store the input set in a hash
-        HashMap inputHash = new HashMap();
-        for (String set : inputSet) {
-            inputHash.put(set, 1);
+        // compute compositional word vector for input set
+        ArrayList<Map<String,Float>> wordVectorList = new ArrayList<>();
+        Set<String> inputHash = new HashSet<>();
+        for( String w : inputSet ){
+            Map<String,Float> v = disco.getWordvector(w);
+            if( v != null ){
+                wordVectorList.add(v);
+            }
+            inputHash.add(w);
         }
-        // retrieve the similar words for all words in the input set and save
-        // them in a hash.
-        ReturnDataBN sim;
-        HashMap hash = new HashMap();
-        for (String set : inputSet) {
-            sim = disco.similarWords(set);
-            if( sim == null ) continue;
-            for (String word : sim.words) {
-                if (hash.containsKey(word)) {
-                    int v = (Integer) hash.get(word);
-                    hash.put(word, v + 1);
-                } else {
-                    hash.put(word, 1);
-                }
+        Map<String,Float> c = Compositionality.composeWordVectors(wordVectorList, 
+                Compositionality.VectorCompositionMethod.ADDITION, null, null, null, null);
+        
+        // retrieve the similar words for the combined vector and save them in the
+        // result if they were not in the input set
+        List<ReturnDataCol> sim = Compositionality.similarWords(c, disco, DISCO.SimilarityMeasure.COSINE, n);
+        List<String> result = new ArrayList<>();
+        for( ReturnDataCol r : sim ){
+            if( !inputHash.contains(r.word) ){
+                result.add(r.word);
             }
         }
-        // for all keys in the hash: save to vector buffer if the hash value is
-        // equal to the length of the input set, i.e. the word appeared in the
-        // similarity lists of all the input words. Do not save if the word is in
-        // the input set.
-        ArrayList<String> buffer = new ArrayList<>();
-        Set keys = hash.keySet();
-        for(Iterator it = keys.iterator(); it.hasNext(); ){
-            String w = (String) it.next();
-            if( (Integer)hash.get(w) >= inputSet.length ){
-                if( ! inputHash.containsKey(w) ){
-                    buffer.add(w);
-                }
-            }
-        }
-        // return the input set plus the words from the buffer
-        String[] res = new String[inputSet.length + buffer.size()];
-        int i;
-        for(i = 0; i < inputSet.length; i++ ){
-            res[i] = inputSet[i];
-        }
-        for (String buffer1 : buffer) {
-            res[i++] = (String) buffer1;
-        }
-        return res;
+        return result;
     }
 
     /***************************************************************************

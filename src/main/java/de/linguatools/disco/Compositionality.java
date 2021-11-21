@@ -585,6 +585,9 @@ public class Compositionality {
         // nach höchstem Ähnlichkeitswert sortieren
         Collections.sort(result);
         if( maxN > 0 ){
+            if( maxN > result.size() ){
+                maxN = result.size();
+            }
             result = result.subList(0, maxN);
         }
         return result;
@@ -636,6 +639,9 @@ public class Compositionality {
         // nach höchstem Ähnlichkeitswert sortieren
         Collections.sort(result);
         if( maxN > 0 ){
+            if( maxN > result.size() ){
+                maxN = result.size();
+            }
             result = result.subList(0, maxN);
         }
         return result;

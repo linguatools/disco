@@ -598,7 +598,7 @@ public class Main{
                     inputSet[k++] = args[i];
                 }
                 // call method
-                String[] res = Cluster.growSet(disco, inputSet);
+                List<String> res = Cluster.growSet(disco, inputSet, 30);
                 for (String re : res) {
                     System.out.println(re);
                 }
