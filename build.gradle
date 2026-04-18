@@ -1,14 +1,25 @@
 plugins {
-  id "com.github.johnrengelman.shadow" version "2.0.4"
+    id 'java-library'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'maven-publish'
 }
-apply plugin: 'java'
-apply plugin: 'maven'
+
+group = 'de.linguatools'
 version = '3.1.0'
-compileJava.options.encoding = 'UTF-8'
-javadoc.options.encoding = 'UTF-8'
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-    
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(Javadoc).configureEach {
+    options.encoding = 'UTF-8'
+}
+
 repositories {
     mavenCentral()
 }
@@ -20,10 +31,27 @@ jar {
 }
 
 dependencies {
-    compile group: 'org.apache.lucene', name: 'lucene-core', version: '5.1.0'
-    compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '5.1.0'
-    compile group: 'org.apache.lucene', name: 'lucene-queryparser', version: '5.1.0'
-    compile group: 'it.unimi.dsi', name: 'sux4j', version: '4.2.0'
-    testCompile 'junit:junit:4.12'
-    testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
+    api 'org.apache.lucene:lucene-core:5.1.0'
+    api 'org.apache.lucene:lucene-analyzers-common:5.1.0'
+    api 'org.apache.lucene:lucene-queryparser:5.1.0'
+    implementation 'it.unimi.dsi:sux4j:4.2.0'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.hamcrest:hamcrest-all:1.3'
+}
+
+shadowJar {
+    mergeServiceFiles()
+    archiveClassifier.set('all')
+}
+
+tasks.named('assemble') {
+    dependsOn tasks.named('shadowJar')
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
 }
