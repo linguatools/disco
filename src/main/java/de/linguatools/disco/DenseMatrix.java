@@ -631,6 +631,97 @@ public class DenseMatrix extends DISCO implements Serializable {
         return config;
     }
     
+    /**
+     * @return the full word embedding matrix (row index = word ID).
+     */
+    public float[][] getMatrix(){
+        return matrix;
+    }
+    
+    /**
+     * @return subword n-gram embedding matrix, or {@code null} if none.
+     */
+    public float[][] getNgramMatrix(){
+        return ngramMatrix;
+    }
+    
+    /**
+     * @return per-word lists of similar word IDs (SIM word spaces only), or {@code null}.
+     */
+    public int[][] getSimMatrix(){
+        return simMatrix;
+    }
+    
+    /**
+     * @return similarity scores aligned with {@link #getSimMatrix()}, or {@code null}.
+     */
+    public float[][] getSimValues(){
+        return simValues;
+    }
+    
+    /**
+     * @return mapping from word hash table index to word ID (matrix row).
+     */
+    public int[] getWordIndex2id(){
+        return wordIndex2id;
+    }
+    
+    /**
+     * @return mapping from word ID to byte offset in {@link #getOffset2word()}.
+     */
+    public int[] getWordId2offset(){
+        return wordId2offset;
+    }
+    
+    /**
+     * @return corpus frequency per word ID.
+     */
+    public int[] getFrequencies(){
+        return frequencies;
+    }
+    
+    /**
+     * @return packed word strings backing {@link #getWord(int)} / vocabulary iteration.
+     */
+    public byte[] getOffset2word(){
+        return offset2word;
+    }
+    
+    /**
+     * @return mapping from n-gram hash index to n-gram ID (ngram matrix row).
+     */
+    public int[] getNgramIndex2id(){
+        return ngramIndex2id;
+    }
+    
+    /**
+     * @return mapping from n-gram ID to byte offset in {@link #getOffset2ngram()}.
+     */
+    public int[] getNgramId2offset(){
+        return ngramId2offset;
+    }
+    
+    /**
+     * @return packed n-gram strings, or {@code null} if no subwords.
+     */
+    public byte[] getOffset2ngram(){
+        return offset2ngram;
+    }
+    
+    /**
+     * @return minimal perfect hash from word (character sequence) to hash table index.
+     */
+    public GOVMinimalPerfectHashFunction<CharSequence> getWord2indexMap(){
+        return word2indexMap;
+    }
+    
+    /**
+     * @return minimal perfect hash from n-gram to hash table index, or {@code null} if none.
+     */
+    public GOVMinimalPerfectHashFunction<CharSequence> getNgram2indexMap(){
+        return ngram2indexMap;
+    }
+    
     public void setWordspaceType(WordspaceType type){
         this.wordspaceType = type;
     }
