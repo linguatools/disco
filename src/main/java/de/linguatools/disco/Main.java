@@ -95,6 +95,10 @@ public class Main{
         System.out.println("\t\t\t\tDoes not work with word spaces of type \"COL\"!");
         System.out.println("\t\t-cu <wordlist> <outputDir>\tcreates sparse matrix file (with word vector for every\n\t\t\t"
                 + " word in wordlist) that can be clustered with CLUTO's vcluster program.");
+        // paths
+        System.out.println("\t\t-p2 <w1> <w2>\tfind the second order shortest path between words <w1> and <w2>");
+        System.out.println("\t\t-pa <file>\tcheck if graph is fully connected; disconnected"
+                + " pairs are written to <file>");
     }
   
     
@@ -767,6 +771,37 @@ public class Main{
                 System.out.print("w3: ");
                 w3 = scan.nextLine().trim();
             }while( !w1.equals("") );
+        }
+        ////////////////////////////////////////////////////////////////////
+        // -pa: check if graph is fully connected
+        ////////////////////////////////////////////////////////////////////
+        else if( args[1].equals("-pa") ){
+            if( args.length < 3 ){
+                System.out.println("Error: Too few arguments.");
+                printUsage();
+                return;
+            }
+            DenseMatrix dm = (DenseMatrix) disco;
+            Connectedness.logWordspacePairConnectivity( dm, args[2] );
+        }
+        ////////////////////////////////////////////////////////////////////
+        // -p2: find the second order shortest path between two words
+        ////////////////////////////////////////////////////////////////////
+        else if( args[1].equals("-p2") ){
+            if( args.length < 4 ){
+                System.out.println("Error: Too few arguments.");
+                printUsage();
+                return;
+            }
+            DenseMatrix dm = (DenseMatrix) disco;
+            String w1 = args[2];
+            String w2 = args[3];
+            List<String> path = Connectedness.findShortestPath(w1, w2, dm);
+            if( path == null ){
+                System.out.println("No path found between "+w1+" and "+w2);
+            }else{
+                System.out.println(path);
+            }
         }
         ////////////////////////////////////////////////////////////////////
         // unknown option

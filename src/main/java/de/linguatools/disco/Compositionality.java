@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
@@ -892,101 +891,6 @@ public class Compositionality {
         }else{
             return returnData;
         }
-    }
-    
-    /**
-     * Exhaustive breath-first search to find the shortest path between two input
-     * words in the neighborhood graph. Interestingly, this always finds a path
-     * (at least if <code>numberOfSimilarWords &gt;= 50</code>), showing that the
-     * neighborhood graph of word spaces is fully connected. For more information
-     * on the neighborhood graph see <code>similarWordsGraphSearch</code>.<br>
-     * <b>Important</b>: This method only works with word spaces of type SIM.<br>
-     * @param i1 ID of input word #1
-     * @param i2 ID of input word #2
-     * @param denseMatrix
-     * @return shortest path between <code>i1</code> and <code>i2</code>. The 
-     * resulting list contains the path in reverse order, i.e. the first list 
-     * element is <code>i2</code>, the last element is <code>i1</code>.
-     * @throws de.linguatools.disco.WrongWordspaceTypeException 
-     */
-    public static List<Integer> findShortestPath(int i1, int i2, DenseMatrix denseMatrix) 
-            throws WrongWordspaceTypeException{
-        
-        if( denseMatrix.getWordspaceType() != WordspaceType.SIM ){
-            throw new WrongWordspaceTypeException("This method can not be applied"
-                    + " to word spaces of type "+denseMatrix.getWordspaceType());
-        }
-        
-        // Breitensuche
-        int val[] = new int[denseMatrix.numberOfWords()+1];
-        int back[] = new int[denseMatrix.numberOfWords()+1];
-        int nr = 0;
-        List<Integer> queue = new LinkedList<>();
-        queue.add(i1);
-        
-        while( !queue.isEmpty() ){
-            int k = queue.remove(0);
-            // gefunden?
-            if( k == i2 ){
-                break;
-            }
-            val[k] = ++nr;
-            // besuche Nachbarknoten von k = ähnliche Wörter
-            for( int n = 0; n < denseMatrix.numberOfSimilarWords(); n++ ){
-                if( val[denseMatrix.getSecondOrderWordvector(k)[n]] == 0 ){
-                    queue.add( denseMatrix.getSecondOrderWordvector(k)[n] );
-                    back[denseMatrix.getSecondOrderWordvector(k)[n]] = k;
-                    val[ denseMatrix.getSecondOrderWordvector(k)[n] ] = -1;
-                }
-            }
-        }
-        
-        List<Integer> shortestPath = new LinkedList<>();
-        shortestPath.add(i2);
-        int p = i2;
-        do{
-            p = back[p];
-            shortestPath.add(p);
-        }while( p != i1 );
-        
-        return shortestPath;
-    }
-    
-    /**
-     * Wrapper method.
-     * @param w1
-     * @param w2
-     * @param denseMatrix
-     * @return the words forming the shortest path.
-     * @throws WrongWordspaceTypeException 
-     * @throws java.io.IOException 
-     */
-    public static List<String> findShortestPath(String w1, String w2, 
-            DenseMatrix denseMatrix) 
-            throws WrongWordspaceTypeException, IOException{
-        
-        if( denseMatrix.getWordspaceType() != WordspaceType.SIM ){
-            throw new WrongWordspaceTypeException("This method can not be applied"
-                    + " to word spaces of type "+denseMatrix.getWordspaceType());
-        }
-        
-        // lookup word IDs
-        int id1 = denseMatrix.getWordId(w1);
-        if( id1 == -1 ){
-            return null;
-        }
-        int id2 = denseMatrix.getWordId(w2);
-        if( id2 == -1 ){
-            return null;
-        }
-        
-        List<Integer> idsPath = findShortestPath(id1, id2, denseMatrix);
-        
-        List<String> path = new ArrayList<>();
-        for( Integer id : idsPath ){
-            path.add( denseMatrix.getWord(id) );
-        }
-        return path;
     }
     
     /**
