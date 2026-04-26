@@ -136,7 +136,7 @@ public class Cluster {
      * @throws WrongWordspaceTypeException if the <code>disco</code> word space
      * is not of type <code>DISCO.WordspaceType.SIM</code>.
      */
-    public static List<String> growSet(DISCO disco, String[] inputSet, int n) 
+    public static List<String> growSet(DISCO disco, List<String> inputSet, int n) 
             throws IOException, WrongWordspaceTypeException{
 
         // check word space type
@@ -164,10 +164,17 @@ public class Cluster {
         List<String> result = new ArrayList<>();
         for( ReturnDataCol r : sim ){
             if( !inputHash.contains(r.word) ){
-                result.add(r.word);
+                result.add(r.word+"\t\t"+r.value);
             }
         }
         return result;
+    }
+
+    public static int overlap(List<String> inputSet1, List<String> inputSet2) {
+        Set<String> set1 = new HashSet<>(inputSet1);
+        Set<String> set2 = new HashSet<>(inputSet2);
+        set1.retainAll(set2);
+        return set1.size();
     }
 
     /***************************************************************************

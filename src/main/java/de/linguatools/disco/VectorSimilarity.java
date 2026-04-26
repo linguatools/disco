@@ -32,7 +32,7 @@ public interface VectorSimilarity {
      * @param denseVector2
      * @return 
      */
-    public double computeSimilarity(float[] denseVector1, float[] denseVector2);
+    double computeSimilarity(float[] denseVector1, float[] denseVector2);
     
     /**
      * Compute similarity between two sparse vectors.
@@ -40,7 +40,7 @@ public interface VectorSimilarity {
      * @param mapVector2
      * @return 
      */
-    public double computeSimilarity(Map<String,Float> mapVector1, 
+    double computeSimilarity(Map<String,Float> mapVector1, 
             Map<String,Float> mapVector2);
     
     /**
@@ -49,6 +49,6 @@ public interface VectorSimilarity {
      * @param doc2
      * @return 
      */
-    public double computeSimilarity(Document doc1, Document doc2);
+    double computeSimilarity(Document doc1, Document doc2);
     
 }

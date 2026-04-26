@@ -22,6 +22,7 @@ import de.linguatools.disco.DISCO.SimilarityMeasure;
 import de.linguatools.disco.Rank.WordAndRank;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.PrintWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -29,6 +30,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -66,6 +68,7 @@ public class Main{
         System.out.println("\t\t-cc <w1> <w2>\treturn the common context for <w1> and <w2>");
         System.out.println("\t\t-n\t\treturn the number of words in the index");
         System.out.println("\t\t-wl <file>\t\twrite word frequency list to file");
+        System.out.println("\t\t-vocab <file>\t\twrite vocabulary to file");
         // compositional
         System.out.println("\t\t-cs \"<p1>\" \"<p2>\"\tcompute semantic similarity between multi-word terms or phrases"
                 + "\n\t\t\t<p1> and <p2> using vector composition");
@@ -97,8 +100,6 @@ public class Main{
                 + " word in wordlist) that can be clustered with CLUTO's vcluster program.");
         // paths
         System.out.println("\t\t-p2 <w1> <w2>\tfind the second order shortest path between words <w1> and <w2>");
-        System.out.println("\t\t-pa <file>\tcheck if graph is fully connected; disconnected"
-                + " pairs are written to <file>");
     }
   
     
@@ -509,6 +510,17 @@ public class Main{
             int i = disco.wordFrequencyList(args[2]);
             System.out.println(i+" of "+disco.numberOfWords()+" words were written.");
         }
+        ////////////////////////////////////////////
+        // -vocab: write vocabulary to file //
+        ////////////////////////////////////////////
+        else if( args[1].equals("-vocab") ){
+            PrintWriter fw = new PrintWriter(args[2], "UTF-8");
+            for(int i = 0; i < disco.numberOfWords(); i++){
+                fw.println(disco.getWord(i));
+            }
+            fw.close();
+            System.out.println(disco.numberOfWords()+" words were written to "+args[2]);
+        }
         ////////////////////////////////////////////////////////////////////
         // -ts: text similarity
         ////////////////////////////////////////////////////////////////////
@@ -596,10 +608,9 @@ public class Main{
                     return;
                 }
                 // create inputSet
-                String[] inputSet = new String[args.length - 2];
-                int k = 0;
+                List<String> inputSet = new ArrayList<>();
                 for(int i = 2; i < args.length; i++){
-                    inputSet[k++] = args[i];
+                    inputSet.add(args[i]);
                 }
                 // call method
                 List<String> res = Cluster.growSet(disco, inputSet, 30);
@@ -771,18 +782,6 @@ public class Main{
                 System.out.print("w3: ");
                 w3 = scan.nextLine().trim();
             }while( !w1.equals("") );
-        }
-        ////////////////////////////////////////////////////////////////////
-        // -pa: check if graph is fully connected
-        ////////////////////////////////////////////////////////////////////
-        else if( args[1].equals("-pa") ){
-            if( args.length < 3 ){
-                System.out.println("Error: Too few arguments.");
-                printUsage();
-                return;
-            }
-            DenseMatrix dm = (DenseMatrix) disco;
-            Connectedness.logWordspacePairConnectivity( dm, args[2] );
         }
         ////////////////////////////////////////////////////////////////////
         // -p2: find the second order shortest path between two words
